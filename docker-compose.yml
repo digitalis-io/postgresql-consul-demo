@@ -1,0 +1,87 @@
+version: '3.7'
+
+services:
+  
+  consul01:
+    image: consul:1.9.3
+    container_name: consul01
+    restart: always
+    volumes:
+     - ./consul/server1.json:/consul/config/server1.json:ro
+     - ./consul/certs/:/consul/config/certs/:ro
+    networks:
+      - pglab
+    ports:
+      - "8500:8500"
+      - "8600:8600/tcp"
+      - "8600:8600/udp"
+    command: "agent -bootstrap-expect=3"
+
+  consul02:
+    image: consul:1.9.3
+    container_name: consul02
+    restart: always
+    volumes:
+     - ./consul/server2.json:/consul/config/server2.json:ro
+     - ./consul/certs/:/consul/config/certs/:ro
+    networks:
+      - pglab
+    command: "agent -bootstrap-expect=3"
+
+  consul03:
+    image: consul:1.9.3
+    container_name: consul03
+    restart: always
+    volumes:
+     - ./consul/server3.json:/consul/config/server3.json:ro
+     - ./consul/certs/:/consul/config/certs/:ro
+    networks:
+      - pglab
+    command: "agent -bootstrap-expect=3"
+
+
+  patroni01:
+    build: ./patroni
+    container_name: patroni01
+    hostname: patroni01
+    volumes:
+     - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
+     - ./patroni/consul-agent.json:/consul/config_template.json:ro
+     - ./patroni/certs:/etc/patroni/certs:ro
+     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/certs/:/etc/consul/certs:ro
+    networks:
+      - pglab
+
+  patroni02:
+    build: ./patroni
+    container_name: patroni02
+    hostname: patroni02
+    volumes:
+     - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
+     - ./patroni/consul-agent.json:/consul/config_template.json:ro
+     - ./patroni/certs:/etc/patroni/certs:ro
+     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/certs/:/etc/consul/certs:ro
+    networks:
+      - pglab
+
+  patroni03:
+    build: ./patroni
+    container_name: patroni03
+    hostname: patroni03
+    volumes:
+     - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
+     - ./patroni/consul-agent.json:/consul/config_template.json:ro
+     - ./patroni/certs:/etc/patroni/certs:ro
+     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
+     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/certs/:/etc/consul/certs:ro
+    networks:
+      - pglab
+
+networks:
+  pglab:
+    driver: bridge

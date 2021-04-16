@@ -1,0 +1,36 @@
+name: "${HOSTNAME}"
+scope: pglab
+namespace: /digitalis.io/
+consul:
+  url: http://127.0.0.1:8500
+postgresql:
+  connect_address: "${HOSTNAME}:5432"
+  bin_dir: /usr/lib/postgresql/13/bin
+  data_dir: /pg_data/13/main
+  listen: "*:5432"
+  authentication:
+    replication:
+      username: replicator
+      password: Zahva4be
+      sslmode: require
+restapi:
+  listen: 127.0.0.1:8008
+bootstrap:
+  dcs:
+    postgresql:
+      parameters:
+        ssl: "on"
+        ssl_ciphers: "TLSv1.2:!aNULL:!eNULL"
+        ssl_cert_file: /etc/patroni/certs/server.crt
+        ssl_key_file: /etc/patroni/certs/server.key
+  pg_hba:
+    - local all all  md5
+    - hostssl all all 127.0.0.1/32 md5
+    - hostssl all all ::1/128 md5
+    - hostssl all all ::1/128 md5
+    - hostssl all all 0.0.0.0/0 md5
+    - hostssl replication replicator patroni01.postgresql-consul-demo_pglab md5
+    - hostssl replication replicator patroni02.postgresql-consul-demo_pglab md5
+    - hostssl replication replicator patroni03.postgresql-consul-demo_pglab md5
+  initdb:
+    - encoding: UTF8

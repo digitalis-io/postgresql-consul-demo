@@ -1,0 +1,20 @@
+{
+    "node_name": "${HOSTNAME}",
+    "data_dir": "/consul/data",
+    "retry_join":[
+        "consul01",
+        "consul02",
+        "consul03"
+     ],
+    "encrypt": "eiweiV9shee3geibongee0aleleech3k",
+    "verify_incoming": true,
+    "verify_outgoing": true,
+    "verify_server_hostname": true,
+    "ca_file": "/etc/consul/certs/consul-agent-ca.pem",
+    "cert_file": "/etc/consul/certs/dc1-client-consul-0.pem",
+    "key_file": "/etc/consul/certs/dc1-client-consul-0-key.pem",
+    "addresses": {
+        "dns": "127.0.0.1",
+        "http": "127.0.0.1"
+    }
+}
