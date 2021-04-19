@@ -1,5 +1,5 @@
 build:
-	@echo "Build patroni docker container image"
+	@echo "Pull and build container images. This make take some time when running for first time."
 	@docker-compose build
 start:
 	@echo "Start cluster"
@@ -10,8 +10,8 @@ stop:
 	@docker-compose stop
 
 destroy:
-	@echo "Destroy cluster"
-	@docker-compose stop && docker-compose rm -f
+	@echo "Force destroy cluster"
+	@docker-compose down --remove-orphans
 
 recreate:
 	@echo "Destroy and recreate cluster"
@@ -26,5 +26,8 @@ status:
 	@docker-compose exec patroni01 patronictl -c /etc/patroni/postgres.yml list 2>/dev/null
 
 switchover:
-	@echo "Switchover to another node"
+	@echo "Force patroni switchover to another node"
 	@docker-compose exec patroni01 patronictl -c /etc/patroni/postgres.yml switchover --force
+
+applogs:
+	@docker-compose logs -f application01 application02

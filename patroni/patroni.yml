@@ -25,6 +25,9 @@ bootstrap:
         ssl_ciphers: "TLSv1.2:!aNULL:!eNULL"
         ssl_cert_file: /etc/patroni/certs/server.crt
         ssl_key_file: /etc/patroni/certs/server.key
+  users:
+    app_user:
+      password: "eW5guPae"
   pg_hba:
     - local all all  md5
     - hostssl all all 127.0.0.1/32 md5
