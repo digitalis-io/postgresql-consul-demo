@@ -1,6 +1,6 @@
 build:
 	@echo "Build patroni docker container image"
-	@docker-compose build -q
+	@docker-compose build
 start:
 	@echo "Start cluster"
 	@docker-compose up -d --remove-orphans
@@ -18,9 +18,13 @@ recreate:
 	@docker-compose stop && docker-compose rm -f && docker-compose up -d --remove-orphans
 
 status:
-	@echo "------------------------------ Docker status ------------------------------"
+	@echo "============================== Docker status =============================="
 	@docker-compose ps 
-	@printf "\n------------------------------ Consul status ------------------------------\n"
-	@docker-compose exec patroni01 consul members 2>/dev/null
-	@printf "\n------------------------------ Patroni status -----------------------------\n"
+	@printf "\n============================== Consul status ==============================\n"
+	@docker-compose exec consul01 consul members 2>/dev/null
+	@printf "\n============================== Patroni status =============================\n"
 	@docker-compose exec patroni01 patronictl -c /etc/patroni/postgres.yml list 2>/dev/null
+
+switchover:
+	@echo "Switchover to another node"
+	@docker-compose exec patroni01 patronictl -c /etc/patroni/postgres.yml switchover --force

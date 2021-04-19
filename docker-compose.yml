@@ -46,10 +46,10 @@ services:
     hostname: patroni01
     volumes:
      - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
-     - ./patroni/consul-agent.json:/consul/config_template.json:ro
      - ./patroni/certs:/etc/patroni/certs:ro
-     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
-     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./patroni/supervisor.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/supervisor.conf:/etc/supervisor/conf.d/consul.conf:ro
+     - ./consul/agent.json:/consul/config_template.json:ro
      - ./consul/certs/:/etc/consul/certs:ro
     networks:
       - pglab
@@ -60,10 +60,10 @@ services:
     hostname: patroni02
     volumes:
      - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
-     - ./patroni/consul-agent.json:/consul/config_template.json:ro
      - ./patroni/certs:/etc/patroni/certs:ro
-     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
-     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./patroni/supervisor.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/supervisor.conf:/etc/supervisor/conf.d/consul.conf:ro
+     - ./consul/agent.json:/consul/config_template.json:ro
      - ./consul/certs/:/etc/consul/certs:ro
     networks:
       - pglab
@@ -74,10 +74,25 @@ services:
     hostname: patroni03
     volumes:
      - ./patroni/patroni.yml:/etc/patroni/patroni_template.yml:ro
-     - ./patroni/consul-agent.json:/consul/config_template.json:ro
      - ./patroni/certs:/etc/patroni/certs:ro
-     - ./patroni/supervisor-consul.conf:/etc/supervisor/conf.d/consul.conf
-     - ./patroni/supervisor-patroni.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./patroni/supervisor.conf:/etc/supervisor/conf.d/patroni.conf
+     - ./consul/supervisor.conf:/etc/supervisor/conf.d/consul.conf:ro
+     - ./consul/agent.json:/consul/config_template.json:ro
+     - ./consul/certs/:/etc/consul/certs:ro
+    networks:
+      - pglab
+
+  application01:
+    build: ./application
+    container_name: application01
+    hostname: application01
+    volumes:
+     - ./application/main.py:/main.py:ro
+     - ./application/dnsmasq.conf:/etc/dnsmasq.d/consul.conf:ro
+     - ./application/resolv.conf:/etc/resolv.conf:ro
+     - ./application/supervisor.conf:/etc/supervisor/conf.d/application.conf:ro
+     - ./consul/supervisor.conf:/etc/supervisor/conf.d/consul.conf:ro
+     - ./consul/agent.json:/consul/config_template.json:ro
      - ./consul/certs/:/etc/consul/certs:ro
     networks:
       - pglab

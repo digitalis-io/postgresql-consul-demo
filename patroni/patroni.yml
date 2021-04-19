@@ -3,6 +3,7 @@ scope: pglab
 namespace: /digitalis.io/
 consul:
   url: http://127.0.0.1:8500
+  register_service: true
 postgresql:
   connect_address: "${HOSTNAME}:5432"
   bin_dir: /usr/lib/postgresql/13/bin
@@ -14,7 +15,8 @@ postgresql:
       password: Zahva4be
       sslmode: require
 restapi:
-  listen: 127.0.0.1:8008
+  connect_address: "${HOSTNAME}:8008"
+  listen: "${HOSTNAME}:8008"
 bootstrap:
   dcs:
     postgresql:

@@ -7,6 +7,7 @@
         "consul03"
      ],
     "encrypt": "eiweiV9shee3geibongee0aleleech3k",
+    "recursors": ["127.0.0.11"],
     "verify_incoming": true,
     "verify_outgoing": true,
     "verify_server_hostname": true,
