@@ -1,6 +1,8 @@
 
 # Postgresql HA cluster in docker using Patroni and Consul.
 
+This project accompanies a blog located here: https://digitalis.io/blog/postgresql/using-consul-for-postgresql-ha-with-no-load-balancers-needed/
+
 This is a minimalistic demo application showing HA Postgresql cluster managed by Patroni and Consul with no extra load balancers.
 The entire setup runs in `docker-compose` and requires `make` utility for helper commands.
 
