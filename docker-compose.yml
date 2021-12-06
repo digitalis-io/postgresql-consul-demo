@@ -92,6 +92,8 @@ services:
       - ./application/resolv.conf:/etc/resolv.conf:ro
       - ./application/supervisor.conf:/etc/supervisor/conf.d/application.conf:ro
       - ./application/pgpass:/root/.pgpass:ro
+      - ./application/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini
+      - ./application/userlist.txt:/etc/pgbouncer/userlist.txt
       - ./consul/supervisor.conf:/etc/supervisor/conf.d/consul.conf:ro
       - ./consul/agent.json:/consul/config_template.json:ro
       - ./consul/certs/:/etc/consul/certs:ro

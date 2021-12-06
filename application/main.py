@@ -22,44 +22,24 @@ class DB:
     def connect(self):
         logging.info('Connecting.')
         self.conn = psycopg2.connect("")
-
-    def disconnect(self):
-        logging.info('Disconnecting.')
-        self.conn.close()
-
-    def reconnect(self):
-        while True:
-            try:
-                self.disconnect()
-                self.connect()
-                break
-            except:
-                logging.error("Connection failed. Retrying.")
-                time.sleep(1)
-
+        self.conn.set_session(autocommit=True)
 
     def connected_to(self):
-        while True:
-            try:
-                cur = self.conn.cursor()
-                cur.execute("SELECT inet_server_addr()")
-                res = cur.fetchall()
-                break
-            except Exception as e:
-                logging.error(e)
-                logging.warning("Something went wrong. Reconnecting.")
-                time.sleep(1)
-                self.reconnect()
-            finally:
-                cur.close()
-        return res[0][0]
+        try:
+            cur = self.conn.cursor()
+            cur.execute("SELECT inet_server_addr(), CASE WHEN pg_is_in_recovery() THEN 'replica' ELSE 'primary' END")
+            res = cur.fetchall()
+            cur.close()
+            return res[0]
+        except Exception as e:
+            logging.error(e)
+            return (None, None)
 
 
 db = DB()
-db.connected_to()
 
 while True:
-    db_ip = db.connected_to()
-    msg = "I'm connected to %s" % db_ip
+    db_ip, role = db.connected_to()
+    msg = f"I'm connected to {db_ip} and it's {role}"
     logging.info(msg)
     time.sleep(1)
